@@ -35,3 +35,47 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### CONFIGURACIÓN SENSIBLE ###
+# Archivos de configuración con credenciales
+application.properties
+application-*.properties
+application.yml
+application-*.yml
+
+# Variables de entorno
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+### ARCHIVOS ADICIONALES ###
+# Logs
+*.log
+logs/
+
+# Base de datos H2 (desarrollo)
+*.db
+*.h2.db
+*.mv.db
+*.trace.db
+
+# Archivos temporales
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Certificados y claves
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+
+/
