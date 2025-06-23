@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -30,4 +31,7 @@ public class DoctorDto {
     private DoctorEntity.Turns turns;
 
     // Relations
+    private UserDto user;
+    private QuotesDto quotes;
+    private SpecialtiesDto specialties;
 }

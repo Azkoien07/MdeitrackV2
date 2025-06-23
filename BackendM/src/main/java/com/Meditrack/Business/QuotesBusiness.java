@@ -1,7 +1,11 @@
 package com.Meditrack.Business;
 
+import com.Meditrack.Dto.DoctorDto;
+import com.Meditrack.Dto.PatientDto;
 import com.Meditrack.Dto.QuotesDto;
+import com.Meditrack.Dto.SpecialtiesDto;
 import com.Meditrack.Entity.QuotesEntity;
+import com.Meditrack.Entity.RoleEntity;
 import com.Meditrack.Service.QuotesService;
 import com.Meditrack.Utilities.Exception.CustomException;
 import org.modelmapper.ModelMapper;
@@ -26,7 +30,39 @@ public class QuotesBusiness {
         try {
             PageRequest pageRequest = PageRequest.of(page, size);
             Page<QuotesEntity> quotesEntityPage = quotesService.findAll(pageRequest);
-            return quotesEntityPage.map(entity -> modelMapper.map(entity, QuotesDto.class));
+            return quotesEntityPage.map(entity -> {
+                QuotesDto dto = new QuotesDto();
+                dto.setId(entity.getId());
+                dto.setDate(entity.getDate());
+                dto.setTime(entity.getTime());
+                dto.setHeadquarters(entity.getHeadquarters());
+                dto.setState(entity.getState());
+
+                // Mapea relaciones si existen
+                if (entity.getDoctor() != null) {
+                    DoctorDto doctorDto = new DoctorDto();
+                    doctorDto.setName(entity.getDoctor().getName());
+                    doctorDto.setLastname(entity.getDoctor().getLastname());
+                    // agrega más campos si los necesitas
+                    dto.setDoctor(doctorDto);
+                }
+
+                if (entity.getSpecialties() != null) {
+                    SpecialtiesDto specialtiesDto = new SpecialtiesDto();
+                    specialtiesDto.setName(entity.getSpecialties().getName());
+                    // agrega más campos si necesitas
+                    dto.setSpecialties(specialtiesDto);
+                }
+
+                if (entity.getPatient() != null) {
+                    PatientDto patientDto = new PatientDto();
+                    patientDto.setName(entity.getPatient().getName());
+                    dto.setPatient(patientDto);
+                }
+
+                return dto;
+            });
+
         } catch (Exception e) {
             throw new CustomException("Error getting Quotes: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }

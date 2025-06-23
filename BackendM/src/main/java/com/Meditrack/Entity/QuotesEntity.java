@@ -39,4 +39,18 @@ public class QuotesEntity implements Serializable {
     private State state;
 
     // Relations
+    // relation (M-1) con patient
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private PatientEntity patient;
+
+    // relation (M-1) con doctor
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private DoctorEntity doctor;
+
+    // relation (M-1) con specialties
+    @ManyToOne
+    @JoinColumn(name = "specialty_id")
+    private SpecialtiesEntity specialties;
 }

@@ -24,14 +24,21 @@ export default function PacienteCard({ paciente, index, onDescargar, onEliminar 
                             {paciente.id}
                         </div>
                         <div>
+                            <div className="font-bold text-gray-900 text-sm sm:text-base">
+                                {paciente.name} {paciente.lastname}
+                            </div>
                             <div className="flex items-center space-x-1 sm:space-x-2">
                                 <Mail className="h-4 w-4 text-gray-500" />
-                                <span className="font-semibold text-gray-800 text-sm sm:text-base">{paciente.usuario?.correo}</span>
+                                <span className="font-semibold text-gray-800 text-sm sm:text-base">
+                                    {paciente.user?.email || "Correo no disponible"}
+                                </span>
                             </div>
                             <div className="flex items-center space-x-1 sm:space-x-2 mt-1">
                                 <Calendar className="h-4 w-4 text-gray-400" />
                                 <span className="text-xs sm:text-sm text-gray-600">
-                                    Registrado: {formatDate(paciente.created_at)}
+                                    {paciente.created_at
+                                        ? `Registrado: ${formatDate(paciente.created_at)}`
+                                        : "Fecha de registro no disponible"}
                                 </span>
                             </div>
                         </div>
@@ -59,7 +66,7 @@ export default function PacienteCard({ paciente, index, onDescargar, onEliminar 
                         <span className="font-medium">Editar</span>
                     </button>
                     <button
-                        onClick={() => onEliminar(paciente.id, paciente.usuario?.correo)}
+                        onClick={() => onEliminar(paciente.id, paciente.user?.email)}
                         className="flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors group text-xs sm:text-base"
                     >
                         <Trash2 className="h-4 w-4 group-hover:scale-110 transition-transform" />

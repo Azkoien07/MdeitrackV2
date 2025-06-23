@@ -1,0 +1,18 @@
+{
+  "name": "meditrackv2",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev:unix": "concurrently -n FRONTEND,BACKEND -c cyan,green \"cd Frontend && bun run dev\" \"cd BackendM && ./gradlew bootRun\"",
+    "dev:win": "concurrently -n FRONTEND,BACKEND -c cyan,green \"cd Frontend && bun run dev\" \"cd BackendM && gradlew.bat bootRun\"",
+    "dev": "bash -c \"if [[ $OS == 'Windows_NT' ]]; then bun run dev:win; else bun run dev:unix; fi\""
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "concurrently": "^9.1.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

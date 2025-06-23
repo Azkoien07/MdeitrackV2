@@ -1,5 +1,6 @@
 package com.Meditrack.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -62,4 +64,13 @@ public class PatientEntity implements Serializable {
     private Date birthdate;
 
     // Relations
+    // relation (1-1) con user
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true)
+    @JsonManagedReference
+    private UserEntity user;
+
+    // relation (1-M) con quotes
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<QuotesEntity> quotes;
 }

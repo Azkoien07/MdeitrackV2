@@ -1,16 +1,16 @@
 import api from '@lib/axios';
 
-export const getRoles = (page = 0, size = 10) =>
+export const getSpecialties = (page = 0, size = 10) =>
     api.get(`/specialties`, { params: { page, size } });
 
-export const getRoleById = (id) =>
+export const getSpecialtyById = (id) =>
     api.get(`/specialties/find/${id}`);
 
-export const createRole = (specialtiesDto) =>
+export const createSpecialty = (specialtiesDto) =>
     api.post(`/specialties/add`, specialtiesDto);
 
-export const updateRole = (id, specialtiesDto) =>
+export const updateSpecialty = (id, specialtiesDto) =>
     api.put(`/specialties/update/${id}`, specialtiesDto);
 
-export const deleteRole = (id) =>
+export const deleteSpecialty = (id) =>
     api.delete(`/specialties/delete/${id}`);

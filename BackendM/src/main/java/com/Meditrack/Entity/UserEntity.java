@@ -1,5 +1,6 @@
 package com.Meditrack.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,4 +27,18 @@ public class UserEntity implements Serializable {
     private String password;
 
     // Relations
+    // relation (M-1) con role
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private RoleEntity role;
+
+    // relation (1-1) con patient
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private PatientEntity patient;
+
+    // relation (1-1) con doctor
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private DoctorEntity doctor;
 }

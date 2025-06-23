@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.io.Serializable;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,4 +29,9 @@ public class RoleEntity implements Serializable {
     // Columns
     @Enumerated(EnumType.STRING)
     private NameRol rol;
+
+    // Relations
+    // relation (1-M) con User
+    @OneToMany(mappedBy = "role")
+    private List<UserEntity> users;
 }

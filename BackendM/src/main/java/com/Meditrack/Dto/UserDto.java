@@ -1,5 +1,6 @@
 package com.Meditrack.Dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,4 +19,8 @@ public class UserDto {
     private String password;
 
     // Relations
+    private RoleDto role;
+    @JsonIgnore
+    private PatientDto patient;
+    private DoctorDto doctor;
 }

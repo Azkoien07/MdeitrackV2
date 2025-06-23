@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import Header from '@components/header'
 import StatCard from '@components/StatCard'
 import ManagementSection from '@components/ManagementSection'
@@ -5,20 +6,18 @@ import PacienteCard from '@components/PacienteCard'
 import DoctorCard from '@components/DoctorCard'
 import { useDashboardData } from '@hooks/useAdminData'
 import { LoadingSpinner } from '@components/LoadingSpinner'
-import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import {
-    Plus,
-    UserCheck,
-    Users,
-    Stethoscope,
-    AlertCircle,
-} from "lucide-react"
+import { toast } from 'react-toastify'
+import { Plus, UserCheck, Users, Stethoscope, AlertCircle } from "lucide-react"
+import { GET_ALL_PATIENTS } from '@service/patientService'
+import { GET_ALL_DOCTORS } from '@/Service/doctorService'
 
 const AdminDashboard = () => {
+    const [patients, setPatients] = useState([]);
+    const [doctors, setDoctors] = useState([]);
+    const [loadingData, setLoadingData] = useState(true);
+    const [fetchError, setFetchError] = useState(null);
+
     const {
-        pacientes,
-        doctores,
         especialidades,
         error,
         loading,
@@ -31,36 +30,46 @@ const AdminDashboard = () => {
         handleDescargarReporte,
     } = useDashboardData();
 
-    if (loading) return <LoadingSpinner />;
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [patientsRes, doctorsRes] = await Promise.all([
+                    GET_ALL_PATIENTS(0, 10),
+                    GET_ALL_DOCTORS(0, 10)
+                ]);
+                setPatients(Array.isArray(patientsRes?.data) ? patientsRes.data : []);
+                setDoctors(Array.isArray(doctorsRes?.data) ? doctorsRes.data : []);
+            } catch (error) {
+                console.error("Error al cargar datos:", error.message || error);
+                setFetchError("No se pudo cargar pacientes o doctores.");
+            } finally {
+                setLoadingData(false);
+            }
+        };
+        fetchData();
+    }, []);
 
-    if (error) return <div className="text-red-500 text-center mt-6">{error}</div>;
+    if (loading || loadingData) return <LoadingSpinner />;
+
+    if (error || fetchError) {
+        return (
+            <div className="text-red-500 text-center mt-6">
+                {error || fetchError}
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50">
-            {/* Header */}
             <Header role={userRole} />
 
             <div className="container mx-auto px-6 py-8 space-y-8">
-                {/* Error Alert */}
-                {error && (
-                    <div className="bg-gradient-to-r from-red-50 to-rose-50 border-l-4 border-red-400 rounded-lg p-4 shadow-sm">
-                        <div className="flex items-center">
-                            <div className="p-2 bg-red-100 rounded-full mr-3">
-                                <AlertCircle className="h-5 w-5 text-red-600" />
-                            </div>
-                            <div>
-                                <h4 className="font-medium text-red-800">Error del Sistema</h4>
-                                <p className="text-red-700 text-sm">{error}</p>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Tarjetas de Estadísticas */}
+                {/* Estadísticas */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <StatCard
                         icon={Users}
                         title="Pacientes Registrados"
-                        value={pacientes.length}
+                        value={patients.length}
                         subtitle="+12% este mes"
                         bgFrom="from-emerald-100"
                         bgTo="to-teal-200"
@@ -73,7 +82,7 @@ const AdminDashboard = () => {
                     <StatCard
                         icon={UserCheck}
                         title="Doctores Activos"
-                        value={doctores.length}
+                        value={doctors.length}
                         subtitle="+5% este mes"
                         bgFrom="from-blue-100"
                         bgTo="to-indigo-200"
@@ -97,13 +106,13 @@ const AdminDashboard = () => {
                     />
                 </div>
 
-                {/* Sección de Pacientes */}
+                {/* Pacientes */}
                 <ManagementSection
                     title="Gestión de Pacientes"
                     description="Administra la información de pacientes"
                     icon={<Users className="h-6 w-6 text-white" />}
                     headerColor="bg-gradient-to-r from-emerald-400 to-teal-500"
-                    items={pacientes}
+                    items={patients}
                     itemCountLabel="registrados"
                     renderItem={(paciente, index) => (
                         <PacienteCard
@@ -116,13 +125,13 @@ const AdminDashboard = () => {
                     )}
                 />
 
-                {/* Sección de Doctores */}
+                {/* Doctores */}
                 <ManagementSection
                     title="Gestión de Doctores"
                     description="Administra doctores y especialidades"
                     icon={<Stethoscope className="h-6 w-6 text-white" />}
                     headerColor="bg-gradient-to-r from-blue-400 to-indigo-500"
-                    items={doctores}
+                    items={doctors}
                     itemCountLabel="registrados"
                     rightHeaderContent={
                         <button
@@ -160,21 +169,8 @@ const AdminDashboard = () => {
                     )}
                 />
             </div>
-            {/* Toast Container */}
-            <ToastContainer
-                position="top-right"
-                autoClose={3000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-                className="mt-16"
-            />
         </div>
     )
 }
-export default AdminDashboard
+
+export default AdminDashboard;

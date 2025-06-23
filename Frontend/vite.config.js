@@ -6,7 +6,7 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true,       // escucha en 0.0.0.0 (todas las interfaces de red)
+    host: true,
     port: 3000,
   },
   resolve: {
@@ -18,10 +18,10 @@ export default defineConfig({
       '@hooks': path.resolve(__dirname, 'src/Hooks'),
       '@styles': path.resolve(__dirname, 'src/Styles'),
       '@assets': path.resolve(__dirname, 'src/Assets'),
-      '@clients': path.resolve(__dirname, 'src/Clients'),
+      '@client': path.resolve(__dirname, 'src/Clients'),
       '@utils': path.resolve(__dirname, 'src/Utils'),
       '@context': path.resolve(__dirname, 'src/Context'),
-      '@services': path.resolve(__dirname, 'src/Services'),
+      '@service': path.resolve(__dirname, 'src/Service'),
       '@pages': path.resolve(__dirname, 'src/Pages'),
     },
   },

@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -47,4 +48,6 @@ public class PatientDto {
     private Date birthdate;
 
     // Relations
+    private UserLiteDto user;
+    private QuotesDto quotes;
 }

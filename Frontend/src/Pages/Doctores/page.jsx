@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react"
-import { toast, ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
-import Header from "@components/header"
+import { toast } from "react-toastify"
 import { LoadingSpinner } from "@components/LoadingSpinner"
+import Header from "@components/header"
 import {
     Calendar,
     Clock,
@@ -237,22 +236,6 @@ const DoctorDashboard = () => {
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-teal-50">
             {/* Header */}
             <Header role="Doctor" />
-
-            <ToastContainer
-                position="top-right"
-                autoClose={3000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-                className="mt-12 sm:mt-16 !w-[calc(100vw-2rem)] sm:!w-auto !max-w-sm sm:!max-w-md !right-2 sm:!right-4"
-                toastClassName="!text-sm !p-3"
-            />
-
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 space-y-6 sm:space-y-8">
                 {/* Tarjetas de Estadísticas del Día */}
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
@@ -365,18 +348,6 @@ const DoctorDashboard = () => {
                                             onChange={(e) => setSelectedDate(e.target.value)}
                                             className="px-3 py-2 bg-white/20 border border-white/30 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-white/50"
                                         />
-                                        <button
-                                            onClick={() =>
-                                                toast.info("Función de agregar cita próximamente", {
-                                                    position: "top-right",
-                                                    autoClose: 3000,
-                                                })
-                                            }
-                                            className="flex items-center space-x-2 bg-white text-teal-600 px-4 py-2 rounded-lg font-semibold hover:bg-teal-50 transition-colors shadow-lg text-sm"
-                                        >
-                                            <Plus className="h-4 w-4" />
-                                            <span className="hidden sm:inline">Nueva Cita</span>
-                                        </button>
                                     </div>
                                 </div>
                             </div>

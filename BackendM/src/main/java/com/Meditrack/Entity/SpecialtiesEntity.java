@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.io.Serializable;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,4 +28,13 @@ public class SpecialtiesEntity implements Serializable {
 
     @Column(name = "description", nullable = false)
     private String description;
+
+    // Relations
+    // relation (1-M) con quotes
+    @OneToMany(mappedBy = "specialties")
+    private Set<QuotesEntity> quotes;
+
+    // relation (M-M) con doctor
+    @ManyToMany(mappedBy = "specialties")
+    private Set<DoctorEntity> doctors;
 }

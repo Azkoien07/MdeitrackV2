@@ -1,48 +1,47 @@
-import { getRoles, getRoleById, createRole, updateRole, deleteRole } from '@client/userClient';
+import { getUsers, getUserById, createUser, updateUser, deleteUser } from '@client/userClient';
 
-export class UserService {
-    async getRoles(page = 0, size = 10) {
-        try {
-            const response = await getRoles(page, size);
-            return response.data;
-        } catch (error) {
-            throw new Error(`Error fetching roles: ${error.message}`);
-        }
+
+export const GET_ALL_USERS = async (page = 0, size = 10) => {
+    try {
+        const response = await getUsers(page, size);
+        return response.data;
+    } catch (error) {
+        throw new Error(`Error fetching users: ${error.message}`);
     }
+}
 
-    async getRoleById(id) {
-        try {
-            const response = await getRoleById(id);
-            return response.data;
-        } catch (error) {
-            throw new Error(`Error fetching role with ID ${id}: ${error.message}`);
-        }
+export const GET_USER_BY_ID = async (id) => {
+    try {
+        const response = await getUserById(id);
+        return response.data;
+    } catch (error) {
+        throw new Error(`Error fetching user with ID ${id}: ${error.message}`);
     }
+}
 
-    async createRole(roleDto) {
-        try {
-            const response = await createRole(roleDto);
-            return response.data;
-        } catch (error) {
-            throw new Error(`Error creating role: ${error.message}`);
-        }
+export const ADD_USER = async (userDto) => {
+    try {
+        const response = await createUser(userDto);
+        return response.data;
+    } catch (error) {
+        throw new Error(`Error creating user: ${error.message}`);
     }
+}
 
-    async updateRole(id, roleDto) {
-        try {
-            const response = await updateRole(id, roleDto);
-            return response.data;
-        } catch (error) {
-            throw new Error(`Error updating role with ID ${id}: ${error.message}`);
-        }
+export const UPDATE_USER = async (id, userDto) => {
+    try {
+        const response = await updateUser(id, userDto);
+        return response.data;
+    } catch (error) {
+        throw new Error(`Error updating user with ID ${id}: ${error.message}`);
     }
+}
 
-    async deleteRole(id) {
-        try {
-            const response = await deleteRole(id);
-            return response.data;
-        } catch (error) {
-            throw new Error(`Error deleting role with ID ${id}: ${error.message}`);
-        }
+export const DELETE_USER = async (id) => {
+    try {
+        const response = await deleteUser(id);
+        return response.data;
+    } catch (error) {
+        throw new Error(`Error deleting user with ID ${id}: ${error.message}`);
     }
 }

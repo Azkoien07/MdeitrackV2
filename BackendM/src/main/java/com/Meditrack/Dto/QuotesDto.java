@@ -31,4 +31,7 @@ public class QuotesDto {
     private QuotesEntity.State state;
 
     // Relations
+    private PatientDto patient;
+    private DoctorDto doctor;
+    private SpecialtiesDto specialties;
 }

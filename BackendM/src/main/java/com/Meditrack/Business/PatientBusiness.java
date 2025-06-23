@@ -1,7 +1,10 @@
 package com.Meditrack.Business;
 
 import com.Meditrack.Dto.PatientDto;
+import com.Meditrack.Dto.RoleDto;
+import com.Meditrack.Dto.UserDto;
 import com.Meditrack.Entity.PatientEntity;
+import com.Meditrack.Entity.RoleEntity;
 import com.Meditrack.Service.PatientService;
 import com.Meditrack.Utilities.Exception.CustomException;
 import org.modelmapper.ModelMapper;
@@ -17,7 +20,15 @@ public class PatientBusiness {
 
     public PatientBusiness(PatientService patientService) {
         this.patientService = patientService;
+
+        // Evitar ciclos infinitos: ignora el paciente dentro del usuario
+        this.modelMapper.typeMap(UserDto.class, UserDto.class)
+                .addMappings(mapper -> mapper.skip(UserDto::setPatient));
+
+        // Agrega soporte de mapeo para RoleEntity a RoleDto
+        this.modelMapper.typeMap(com.Meditrack.Entity.RoleEntity.class, com.Meditrack.Dto.RoleDto.class);
     }
+
 
     // Validation Object
 

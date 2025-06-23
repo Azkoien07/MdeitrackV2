@@ -1,16 +1,16 @@
 import api from '@lib/axios';
 
-export const getPatients = (page = 0, size = 10) =>
+export const getQuotes = (page = 0, size = 10) =>
     api.get(`/quotes`, { params: { page, size } });
 
-export const getPatientById = (id) =>
+export const getQuoteById = (id) =>
     api.get(`/quotes/find/${id}`);
 
-export const createPatient = (quotesDto) =>
+export const createQuote = (quotesDto) =>
     api.post(`/quotes/add`, quotesDto);
 
-export const updatePatient = (id, quotesDto) =>
+export const updateQuote = (id, quotesDto) =>
     api.put(`/quotes/update/${id}`, quotesDto);
 
-export const deletePatient = (id) =>
+export const deleteQuote = (id) =>
     api.delete(`/quotes/delete/${id}`);

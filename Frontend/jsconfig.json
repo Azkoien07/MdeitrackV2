@@ -9,7 +9,7 @@
                 "src/app/*"
             ],
             "@components/*": [
-                "src/components/*"
+                "src/Components/*"
             ],
             "@hooks/*": [
                 "src/Hooks/*"
@@ -26,15 +26,20 @@
             "@assets/*": [
                 "src/Assets/*"
             ],
-            "@clients/*": [
+            "@client/*": [
                 "src/Clients/*"
             ],
             "@pages/*": [
                 "src/Pages/*"
             ],
+            "@service/*": [
+                "src/Service/*"
+            ],
         }
     },
     "include": [
-        "src"
+        "src",
+        "jsx",
+        "js"
     ]
 }

@@ -25,10 +25,10 @@ export default function DoctorCard({
                             {doctor.id}
                         </div>
                         <div>
-                            <div className="flex items-center space-x-1 sm:space-x-2">
-                                <Mail className="h-4 w-4 text-gray-500" />
-                                <span className="font-semibold text-gray-800 text-sm sm:text-base">{doctor.usuario?.correo}</span>
-                            </div>
+                            <span className="font-semibold text-gray-800 text-sm sm:text-base">
+                                {doctor.name} {doctor.lastname}
+                            </span>
+
                         </div>
                     </div>
 
@@ -38,10 +38,12 @@ export default function DoctorCard({
                             <span className="font-medium text-gray-700 text-sm sm:text-base">Especialidades:</span>
                         </div>
                         <div className="flex flex-wrap gap-1 sm:gap-2">
-                            {doctor.especialidades.length === 0 ? (
-                                <span className="bg-gray-100 text-gray-500 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">Sin especialidades</span>
+                            {(doctor.especialidades?.length ?? 0) === 0 ? (
+                                <span className="bg-gray-100 text-gray-500 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
+                                    Sin especialidades
+                                </span>
                             ) : (
-                                doctor.especialidades.map((especialidad) => (
+                                doctor.especialidades?.map((especialidad) => (
                                     <span
                                         key={especialidad.id}
                                         className="bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium"
@@ -51,6 +53,7 @@ export default function DoctorCard({
                                 ))
                             )}
                         </div>
+
                     </div>
                 </div>
 
@@ -64,12 +67,13 @@ export default function DoctorCard({
                         >
                             <option value="">Seleccionar especialidad</option>
                             {especialidades
-                                .filter((esp) => !doctor.especialidades.some((docEsp) => docEsp.id === esp.id))
+                                .filter((esp) => !(doctor.especialidades ?? []).some((docEsp) => docEsp.id === esp.id))
                                 .map((esp) => (
                                     <option key={esp.id} value={esp.id}>
                                         {esp.nombre}
                                     </option>
                                 ))}
+
                         </select>
 
                         <button

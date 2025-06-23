@@ -1,15 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ModalRegister } from '@components/Modals/modalRegister';
-import { FaGoogle } from "react-icons/fa";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
+import { GET_ALL_ROLES } from '@service/roleService'
+import { login } from '@service/loginService';
 
 export default function Login({ onLogin }) {
+  const [rol, setRol] = useState('');
+  const [roles, setRoles] = useState([]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const data = await GET_ALL_ROLES(0, 10);
+        setRoles(Array.isArray(data?.data) ? data.data : []);
+      } catch (error) {
+        console.error("error al cargar roles:", error.message);
+      }
+    };
+    fetchRoles();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,24 +51,32 @@ export default function Login({ onLogin }) {
       return;
     }
 
-    setError('');
-    setIsLoading(true);
-
     try {
-      // Simular envío (aquí va tu fetch o axios)
-      await new Promise((res) => setTimeout(res, 1500));
-      onLogin?.({ email, password });
-    } catch (err) {
-      toast.error('Ocurrió un error al iniciar sesión.');
-      console.error(err);
+      setIsLoading(true);
+      const data = await login(email, password);
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("rol", data.rol);
+
+      toast.success("Inicio de sesión exitoso");
+
+      // Redireccionar según el rol
+      if (data.rol === "Doctor") {
+        window.location.href = "/doctores";
+      } else if (data.rol === "Paciente") {
+        window.location.href = "/pacientes";
+      } else if (data.rol === "Admin") {
+        window.location.href = "/admin";
+      }
+
+    } catch (error) {
+      console.error(error);
+      toast.error("Credenciales inválidas o error del servidor.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSocialLogin = (provider) => {
-    console.log(`Iniciando sesión con ${provider}`);
-  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-zinc-50 via-slate-100 to-gray-200 overflow-hidden relative">
@@ -115,6 +137,22 @@ export default function Login({ onLogin }) {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
+              <label className="block text-base font-semibold text-gray-700 mb-2">Rol</label>
+              <select
+                value={rol}
+                onChange={(e) => setRol(e.target.value)}
+                className="w-full px-4 py-2.5 bg-white/95 border border-slate-200 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-300 placeholder:text-slate-400 text-gray-700 text-base sm:text-lg shadow-sm"
+              >
+                <option value="" disabled> Selecciona tu rol</option>
+                {Array.isArray(roles) && roles.map((rolItem) => (
+                  <option key={rolItem.id} value={rolItem.rol}>
+                    {rolItem.rol}
+                  </option>
+                ))}
+
+              </select>
+            </div>
+            <div>
               <label className="block text-base font-semibold text-gray-700 mb-2">Correo electrónico</label>
               <input
                 type="email"
@@ -150,25 +188,13 @@ export default function Login({ onLogin }) {
             </button>
           </form>
 
-          <div className="my-5 flex items-center">
-            <div className="flex-1 h-px bg-slate-200"></div>
-            <span className="px-3 text-base text-slate-400">o continúa con</span>
-            <div className="flex-1 h-px bg-slate-200"></div>
-          </div>
-
-          <button
-            onClick={() => handleSocialLogin('Google')}
-            className="w-full flex items-center justify-center px-4 py-2.5 bg-white border border-slate-200 rounded-3xl text-gray-700 font-semibold text-base sm:text-lg hover:shadow-lg transition gap-3 shadow-sm"
-          >
-            <FaGoogle className="text-xl" /> Continuar con Google
-          </button>
-
           <p className="text-center mt-5 text-base text-slate-500">
             ¿No tienes una cuenta?{' '}
             <button type="button" onClick={() => setShowRegister(true)} className="text-gray-700 hover:underline font-semibold">Registrarse</button>
           </p>
           {showRegister && (
             <ModalRegister
+              roles={roles.filter(r => r.rol !== 'Admin')}
               onRegister={() => setShowRegister(false)}
               onClose={() => setShowRegister(false)}
             />
@@ -184,7 +210,6 @@ export default function Login({ onLogin }) {
           }}
         ></aside>
       </div>
-      <ToastContainer />
     </div>
   );
 }

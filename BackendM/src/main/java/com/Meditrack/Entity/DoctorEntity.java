@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.io.Serializable;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -47,5 +48,21 @@ public class DoctorEntity implements Serializable {
     private Turns turns;
 
     // Relations
+    // relation (1-1) con user
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true)
+    private UserEntity user;
 
+    // relation (1-M) con quotes
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+    private Set<QuotesEntity> quotes;
+
+    // relation (M-M) con specialties
+    @ManyToMany
+    @JoinTable(
+            name = "doctor_specialty",
+            joinColumns = @JoinColumn(name = "doctor_id"),
+            inverseJoinColumns = @JoinColumn(name = "specialty_id")
+    )
+    private Set<SpecialtiesEntity> specialties;
 }
